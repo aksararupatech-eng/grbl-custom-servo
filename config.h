@@ -41,6 +41,13 @@
 // #define BAUD_RATE 230400
 #define BAUD_RATE 115200
 
+// Hobby servo on Uno A4 (PC4). Timer2 shares the existing spindle PWM timebase.
+// Nominal 0/180 degree pulse endpoints; angles are set by $141/$142.
+#define ENABLE_COMMAND_SERVO
+#define COMMAND_SERVO_PIN 18 // Arduino A4 (PC4); other pins are reserved by Grbl.
+#define COMMAND_SERVO_MIN_US 1000
+#define COMMAND_SERVO_MAX_US 2000
+
 // Define realtime command special characters. These characters are 'picked-off' directly from the
 // serial read data stream and are not passed to the grbl line execution parser. Select characters
 // that do not and must not exist in the streamed g-code program. ASCII control characters may be

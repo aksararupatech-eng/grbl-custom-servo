@@ -105,6 +105,9 @@ void settings_restore(uint8_t restore_flag) {
   if (restore_flag & SETTINGS_RESTORE_DEFAULTS) {    
     settings = defaults;
     write_global_settings();
+    #ifdef ENABLE_COMMAND_SERVO
+      command_servo_settings_restore();
+    #endif
   }
 
   if (restore_flag & SETTINGS_RESTORE_PARAMETERS) {
@@ -192,6 +195,9 @@ uint8_t read_global_settings() {
 // A helper method to set settings from command line
 uint8_t settings_store_global_setting(uint8_t parameter, float value) {
   if (value < 0.0) { return(STATUS_NEGATIVE_VALUE); }
+  #ifdef ENABLE_COMMAND_SERVO
+    if (parameter == 141 || parameter == 142) { return(command_servo_store_setting(parameter, value)); }
+  #endif
   if (parameter >= AXIS_SETTINGS_START_VAL) {
     // Store axis configuration. Axis numbering sequence set by AXIS_SETTING defines.
     // NOTE: Ensure the setting index corresponds to the report.c settings printout.
@@ -305,6 +311,9 @@ uint8_t settings_store_global_setting(uint8_t parameter, float value) {
 
 // Initialize the config subsystem
 void settings_init() {
+  #ifdef ENABLE_COMMAND_SERVO
+    command_servo_settings_load();
+  #endif
   if(!read_global_settings()) {
     report_status_message(STATUS_SETTING_READ_FAIL);
     settings_restore(SETTINGS_RESTORE_ALL); // Force restore all EEPROM data.

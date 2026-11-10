@@ -126,6 +126,14 @@ uint8_t system_execute_line(char *line)
   uint8_t helper_var = 0; // Helper variable
   float parameter, value;
   switch( line[char_counter] ) {
+    #ifdef ENABLE_COMMAND_SERVO
+    case 'O': case 'T':
+      if (line[2] != 'S' || line[3] != 0) { return(STATUS_INVALID_STATEMENT); }
+      if (sys.state != STATE_IDLE || plan_get_current_block() != NULL) { return(STATUS_IDLE_ERROR); }
+      if (system_check_safety_door_ajar()) { return(STATUS_CHECK_DOOR); }
+      command_servo_set(line[1] == 'O');
+      break;
+    #endif
     case 0 : report_grbl_help(); break;
     case 'J' : // Jogging
       // Execute only if in IDLE or JOG states.

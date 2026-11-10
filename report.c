@@ -222,6 +222,10 @@ void report_grbl_settings() {
     }
     val += AXIS_SETTINGS_INCREMENT;
   }
+  #ifdef ENABLE_COMMAND_SERVO
+    report_util_uint8_setting(141,command_servo_settings.closed_degrees);
+    report_util_uint8_setting(142,command_servo_settings.open_degrees);
+  #endif
 }
 
 
